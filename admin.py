@@ -8,20 +8,22 @@ from database import SessionLocal
 
 class HeroAdmin(ModelView, model=Hero):
     column_list = [Hero.id, Hero.name, Hero.profession, Hero.description, Hero.image]
-    # form_excluded_columns ni olib tashlang yoki comment qiling
-    form_columns = [Hero.name, Hero.profession, Hero.description, Hero.image]
+    form_columns = [Hero.name, Hero.profession, Hero.description]  # Image ni olib tashlang
 
     async def scaffold_form(self, form_create_rules=None):
         form = await super().scaffold_form()
         form.description = TextAreaField("Description", validators=[DataRequired()])
-        form.image = FileField("Rasm yuklash")  # image ni FileField qilib qo'shing
+        form.image = FileField("Rasm yuklash")
         return form
 
     async def on_model_change(self, data, model, is_created, request):
+        # Image maydonini data dan olib tashlash
+        if 'image' in data:
+            data.pop('image')
+        
         form = await request.form()
         image_file = form.get("image")
 
-        # Agar yangi rasm yuklanmagan bo'lsa, mavjud rasmni saqlab qolish
         if image_file and hasattr(image_file, "filename") and image_file.filename:
             filename = image_file.filename
             save_path = f"static/uploads/{filename}"
@@ -31,24 +33,25 @@ class HeroAdmin(ModelView, model=Hero):
                 f.write(await image_file.read())
 
             model.image = f"/static/uploads/{filename}"
-        # Yangi rasm yuklanmagan va model yangi yaratilayotgan bo'lsa
         elif is_created and not model.image:
-            model.image = "/static/uploads/default.jpg"  # default rasm
+            model.image = "/static/uploads/default.jpg"
 
         return await super().on_model_change(data, model, is_created, request)
 
 class AboutAdmin(ModelView, model=About):
     column_list = [About.id, About.description, About.image]
-    # form_excluded_columns ni olib tashlang
-    form_columns = [About.description, About.image]
+    form_columns = [About.description]  # Image ni olib tashlang
 
     async def scaffold_form(self, form_create_rules=None):
         form = await super().scaffold_form()
         form.description = TextAreaField("Description", validators=[DataRequired()])
-        form.image = FileField("Rasm yuklash")  # image ni FileField qilib qo'shing
+        form.image = FileField("Rasm yuklash")
         return form
 
     async def on_model_change(self, data, model, is_created, request):
+        if 'image' in data:
+            data.pop('image')
+            
         form = await request.form()
         image_file = form.get("image")
 
@@ -98,16 +101,18 @@ class ProjectAdmin(ModelView, model=Project):
         Project.id, Project.title, Project.description,
         Project.technologies, Project.image, Project.link_demo, Project.link_git_github
     ]
-    # form_excluded_columns ni olib tashlang
-    form_columns = [Project.title, Project.description, Project.technologies, Project.image, Project.link_demo, Project.link_git_github]
+    form_columns = [Project.title, Project.description, Project.technologies, Project.link_demo, Project.link_git_github]  # Image ni olib tashlang
 
     async def scaffold_form(self, form_create_rules=None):
         form = await super().scaffold_form()
         form.description = TextAreaField("Description", validators=[DataRequired()])
-        form.image = FileField("Rasm yuklash")  # image ni FileField qilib qo'shing
+        form.image = FileField("Rasm yuklash")
         return form
 
     async def on_model_change(self, data, model, is_created, request):
+        if 'image' in data:
+            data.pop('image')
+            
         form = await request.form()
         image_file = form.get("image")
 
@@ -127,16 +132,18 @@ class ProjectAdmin(ModelView, model=Project):
 
 class ContactAboutAdmin(ModelView, model=ContactAbout):
     column_list = [ContactAbout.id, ContactAbout.title, ContactAbout.icon]
-    # form_excluded_columns ni olib tashlang
-    form_columns = [ContactAbout.title, ContactAbout.icon]
+    form_columns = [ContactAbout.title]  # Icon ni olib tashlang
 
     async def scaffold_form(self, form_create_rules=None):
         form = await super().scaffold_form()
         form.title = TextAreaField("Title", validators=[DataRequired()])
-        form.icon = FileField("Icon yuklash")  # icon ni FileField qilib qo'shing
+        form.icon = FileField("Icon yuklash")
         return form
 
     async def on_model_change(self, data, model, is_created, request):
+        if 'icon' in data:
+            data.pop('icon')
+            
         form = await request.form()
         icon_file = form.get("icon")
 
