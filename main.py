@@ -1,13 +1,15 @@
-# backend/main.py
 from fastapi import FastAPI, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from sqladmin import Admin
 from fastapi.staticfiles import StaticFiles
 import os, shutil
-from .database import Base, engine, SessionLocal
-from .admin import CategoryAdmin, ContactAboutAdmin, ContactSocialAdmin, HeroAdmin, ProjectAdmin, ContactAdmin, AboutAdmin, TechnologyAdmin,StatsAdmin
-from .models import Category, Hero, Project, Contact, About, Technology, ContactAbout, ContactSocial,Stats
+
+from database import Base, engine, SessionLocal
+from admin import CategoryAdmin, ContactAboutAdmin, ContactSocialAdmin, HeroAdmin, ProjectAdmin, ContactAdmin, AboutAdmin, TechnologyAdmin, StatsAdmin
+from models import Category, Hero, Project, Contact, About, Technology, ContactAbout, ContactSocial, Stats
+
 from pydantic import BaseModel
+
 
 
 app = FastAPI(title="Portfolio API")

@@ -1,10 +1,10 @@
-# backend/admin.py
-import os
 from sqladmin import ModelView
 from wtforms import SelectMultipleField, StringField, TextAreaField, FileField, SelectField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
-from .models import Category, Hero, Project, Contact, About, Technology, ContactAbout, ContactSocial, Stats
-from .database import SessionLocal
+import os
+
+from models import Category, Hero, Project, Contact, About, Technology, ContactAbout, ContactSocial, Stats
+from database import SessionLocal
 
 class HeroAdmin(ModelView, model=Hero):
     column_list = [Hero.id, Hero.name, Hero.profession, Hero.description, Hero.image]

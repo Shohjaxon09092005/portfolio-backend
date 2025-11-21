@@ -1,7 +1,8 @@
 # backend/models.py
 from sqlalchemy import Column, ForeignKey, Integer, String, Text, Table
 from sqlalchemy.orm import relationship
-from .database import Base
+from database import Base
+
 
 # Association table for many-to-many relationship between Project and Technology
 project_technology = Table(
